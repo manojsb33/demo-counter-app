@@ -21,5 +21,14 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
+        stage('Coad Quality analysis') {
+            steps {
+                script{
+                    withSonarQubeEnv(credentialsId: 'sonar-hi') {
+                        sh 'mvn clean package sonar:sonar'
+                    }
+                }
+            }
+        }
     }
 }
