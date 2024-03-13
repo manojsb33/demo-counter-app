@@ -13,7 +13,7 @@ pipeline {
         }
         stage('maven integration test') {
             steps{
-                sh 'mvn verify -DskipUnitTests'
+                sh 'mvn verify'
             }
         }
     }
