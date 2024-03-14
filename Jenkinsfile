@@ -73,9 +73,9 @@ pipeline {
         stage('Push to Dockerhub'){
             steps{
                 script{
-                    withCredentials([usernameColonPassword(credentialsId: 'dockerhub', variable: 'docker_hub')]) {
-                        sh 'docker login -u manoj3366 'p' ${dockerhub}'
-                        sh 'docker push manoj3366/$JOB_NAME.v1.$BUILD_ID:latest'
+                    withCredentials([usernamePassword(credentialsId:"dockerhub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
+                    sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+                    sh "docker push manoj3366/$JOB_NAME.v1.$BUILD_ID:latest"
 
                     }
                 }
