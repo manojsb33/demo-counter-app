@@ -64,19 +64,17 @@ pipeline {
         stage('Docker Image Build'){
             steps{
                 script{
-                    sh 'docker build -t $JOB_NAME.v1.$BUILD_ID .'
-                    sh 'docker tag $JOB_NAME.v1.$BUILD_ID manoj3366/$JOB_NAME.v1.$BUILD_ID:latest'
-
+                    sh 'docker build -t $JOB_NAME .'
                 }
             }
         }
         stage('Push to Docker Hub'){
             steps{
                 script{
-                    withCredentials([string(credentialsId: 'dockerhub', variable: 'docker_hub')]){
-                        sh 'docker login -u manoj3366 -p ${docker_hub}'
-                        sh 'docker push manoj3366/$JOB_NAME.v1.$BUILD_ID:latest'
-                        
+                    withCredentials([usernamePassword(credentialsId:"dockerhub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
+                        sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+                        sh "docker tag $JOB_NAME ${env.dockerHubUser}/$JOB_NAME:latest"
+                        sh "docker push ${env.dockerHubUser}/$JOB_NAME:latest"
                     }
                 }
             }
