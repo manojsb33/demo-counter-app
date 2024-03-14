@@ -70,13 +70,13 @@ pipeline {
                 }
             }
         }
-        stage('Push to Dockerhub'){
+        stage('Push to Docker Hub'){
             steps{
                 script{
-                    withCredentials([usernamePassword(credentialsId:"dockerhub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
-                    sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                    sh "docker push manoj3366/$JOB_NAME.v1.$BUILD_ID:latest"
-
+                    withCredentials([string(credentialsId: 'dockerhub', variable: 'docker_hub')]){
+                        sh 'docker login -u manoj3366 -p ${docker_hub}'
+                        sh 'docker push manoj3366/$JOB_NAME.v1.$BUILD_ID:latest'
+                        
                     }
                 }
             }
